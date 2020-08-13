@@ -262,7 +262,10 @@ class WeatherStatusService {
 						// if the Expires response header is set, use it to define cache duration
 						$expireTs = (new \Datetime($headers['Expires'][0]))->getTimestamp();
 						$nowTs = (new \Datetime())->getTimestamp();
-						$cacheDuration = $expireTs - $nowTs;
+						$duration = $expireTs - $nowTs;
+						if ($duration > $cacheDuration) {
+							$cacheDuration = $duration;
+						}
 					}
 					$this->cache->set($cacheKey, $json, $cacheDuration);
 				}
