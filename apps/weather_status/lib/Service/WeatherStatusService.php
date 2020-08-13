@@ -113,8 +113,8 @@ class WeatherStatusService {
 
 	private function resolveLocation($lat, $lon) {
 		$params = [
-			'lat' => number_format($lat, 3),
-			'lon' => number_format($lon, 3),
+			'lat' => number_format($lat, 2),
+			'lon' => number_format($lon, 2),
 			'addressdetails' => 1,
 			'format' => 'json',
 		];
@@ -215,8 +215,8 @@ class WeatherStatusService {
 
 	private function forecastRequest(float $lat, float $lon, int $nbValues = 10): array {
 		$params = [
-			'lat' => number_format($lat, 3),
-			'lon' => number_format($lon, 3),
+			'lat' => number_format($lat, 2),
+			'lon' => number_format($lon, 2),
 		];
 		$url = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
 		$weather = $this->requestJSON($url, $params);
