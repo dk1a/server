@@ -278,6 +278,7 @@ export default {
 		 * @param {Object} share.data the request data
 		 */
 		processShares({ data }) {
+			console.error(data)
 			if (data.ocs && data.ocs.data && data.ocs.data.length > 0) {
 				// create Share objects and sort by newest
 				const shares = data.ocs.data
@@ -286,6 +287,10 @@ export default {
 
 				this.linkShares = shares.filter(share => share.type === this.SHARE_TYPES.SHARE_TYPE_LINK || share.type === this.SHARE_TYPES.SHARE_TYPE_EMAIL)
 				this.shares = shares.filter(share => share.type !== this.SHARE_TYPES.SHARE_TYPE_LINK && share.type !== this.SHARE_TYPES.SHARE_TYPE_EMAIL)
+
+				console.error(this.linkShares)
+				console.error(this.shares)
+
 				console.debug('Processed', this.linkShares.length, 'link share(s)')
 				console.debug('Processed', this.shares.length, 'share(s)')
 			}
