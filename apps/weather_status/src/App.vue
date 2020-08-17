@@ -49,21 +49,6 @@
 					@submit="onAddressSubmit">
 					{{ $t('weather_status', 'Set custom address') }}
 				</ActionInput>
-				<ActionSeparator />
-				<ActionLink
-					icon="icon-external"
-					target="_blank"
-					:href="weatherCreditTarget"
-					:close-after-click="true">
-					{{ $t('weather_status', 'Weather from Met.no') }}
-				</ActionLink>
-				<ActionLink
-					icon="icon-external"
-					target="_blank"
-					:href="nominatimCreditTarget"
-					:close-after-click="true">
-					{{ $t('weather_status', 'Geocoding with Nominatim') }}
-				</ActionLink>
 			</Actions>
 		</div>
 	</li>
@@ -116,8 +101,6 @@ export default {
 				heavyrainshowers_day: 'icon-heavy-rainshowers-day',
 				heavyrainshowers_night: 'icon-heavy-rainshowers-night',
 			},
-			weatherCreditTarget: 'https://api.met.no/doc/License',
-			nominatimCreditTarget: 'https://operations.osmfoundation.org/policies/nominatim/',
 		}
 	},
 	computed: {
