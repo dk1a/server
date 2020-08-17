@@ -95,7 +95,7 @@ class WeatherStatusService {
 	/**
 	 */
 	public function setLocation(string $address = '', $lat = null, $lon = null): array {
-		if ($lat !== null and $lon !== null) {
+		if ($lat !== null && $lon !== null) {
 			$this->config->setUserValue($this->userId, 'weather_status', 'lat', $lat);
 			$this->config->setUserValue($this->userId, 'weather_status', 'lon', $lon);
 			$address = $this->resolveLocation($lat, $lon);
@@ -125,7 +125,7 @@ class WeatherStatusService {
 	}
 
 	private function formatOsmAddress($json) {
-		if (isset($json['address']) and isset($json['display_name'])) {
+		if (isset($json['address']) && isset($json['display_name'])) {
 			$jsonAddr = $json['address'];
 			$cityAddress = '';
 			// priority : city, town, village, municipality
@@ -159,7 +159,7 @@ class WeatherStatusService {
 
 	public function setAddress(string $address): array {
 		$addressInfo = $this->searchForAddress($address);
-		if (isset($addressInfo['display_name']) and isset($addressInfo['lat']) and isset($addressInfo['lon'])) {
+		if (isset($addressInfo['display_name']) && isset($addressInfo['lat']) && isset($addressInfo['lon'])) {
 			$formattedAddress = $this->formatOsmAddress($addressInfo);
 			$this->config->setUserValue($this->userId, 'weather_status', 'address', $formattedAddress);
 			$this->config->setUserValue($this->userId, 'weather_status', 'lat', $addressInfo['lat']);
@@ -186,7 +186,7 @@ class WeatherStatusService {
 		];
 		$url = 'https://nominatim.openstreetmap.org/search/' . $address;
 		$results = $this->requestJSON($url, $params);
-		if (is_array($results) and count($results) > 0) {
+		if (is_array($results) && count($results) > 0) {
 			return $results[0];
 		}
 		return ['error' => $this->l10n->t('No result.')];
@@ -208,7 +208,7 @@ class WeatherStatusService {
 	public function getForecast(): array {
 		$lat = $this->config->getUserValue($this->userId, 'weather_status', 'lat', '');
 		$lon = $this->config->getUserValue($this->userId, 'weather_status', 'lon', '');
-		if (is_numeric($lat) and is_numeric($lon)) {
+		if (is_numeric($lat) && is_numeric($lon)) {
 			return $this->forecastRequest(floatval($lat), floatval($lon));
 		} else {
 			return ['success' => false];
@@ -222,7 +222,7 @@ class WeatherStatusService {
 		];
 		$url = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
 		$weather = $this->requestJSON($url, $params);
-		if (isset($weather['properties']) and isset($weather['properties']['timeseries']) and is_array($weather['properties']['timeseries'])) {
+		if (isset($weather['properties']) && isset($weather['properties']['timeseries']) && is_array($weather['properties']['timeseries'])) {
 			return array_slice($weather['properties']['timeseries'], 0, $nbValues);
 		}
 		return ['error' => $this->l10n->t('Malformed JSON data.')];
@@ -260,7 +260,7 @@ class WeatherStatusService {
 				if (isset($this->cache)) {
 					// default cache duration is one hour
 					$cacheDuration = 60 * 60;
-					if (isset($headers['Expires']) and count($headers['Expires']) > 0) {
+					if (isset($headers['Expires']) && count($headers['Expires']) > 0) {
 						// if the Expires response header is set, use it to define cache duration
 						$expireTs = (new \Datetime($headers['Expires'][0]))->getTimestamp();
 						$nowTs = (new \Datetime())->getTimestamp();
