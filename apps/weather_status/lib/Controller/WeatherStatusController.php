@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace OCA\WeatherStatus\Controller;
 
 use OCA\WeatherStatus\Service\WeatherStatusService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\ILogger;
@@ -97,6 +98,10 @@ class WeatherStatusController extends OCSController {
 	 */
 	public function getForecast(): DataResponse {
 		$forecast = $this->service->getForecast();
-		return new DataResponse($forecast);
+		if (isset($forecast['success']) && $forecast['success'] === false) {
+			return new DataResponse($forecast, Http::STATUS_NOT_FOUND);
+		} else {
+			return new DataResponse($forecast);
+		}
 	}
 }

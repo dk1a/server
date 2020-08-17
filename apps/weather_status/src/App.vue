@@ -217,7 +217,6 @@ export default {
 					this.saveLocation(this.lat, this.lon)
 				},
 				(error) => {
-					showError(this.$t('weather_status', 'Browser location permission refused, try to manually define a location.'))
 					console.debug('location permission refused')
 					console.debug(error)
 					this.saveMode(MODE_MANUAL_LOCATION)
@@ -240,7 +239,7 @@ export default {
 			try {
 				this.forecasts = await network.fetchForecast()
 			} catch (err) {
-				showError(this.$t('weather_status', 'There was an error getting the forecasts.'))
+				this.errorMessage = this.$t('weather_status', 'No weather information found')
 				console.debug(err)
 			}
 			this.loading = false
