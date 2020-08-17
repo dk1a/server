@@ -167,7 +167,6 @@ export default {
 		},
 	},
 	mounted() {
-		// bootstrap: try to get location from browser
 		this.bootstrap()
 	},
 	methods: {
@@ -179,7 +178,6 @@ export default {
 				this.address = loc.address
 				this.mode = loc.mode
 
-				console.debug('in bootstrap. mode=' + this.mode + ' latlng: ' + this.lat + ' ' + this.lon + ' address: ' + this.address)
 				if (this.mode === MODE_BROWSER_LOCATION) {
 					this.askBrowserLocation()
 				} else if (this.mode === MODE_MANUAL_LOCATION) {
@@ -192,7 +190,6 @@ export default {
 		},
 		startLoop() {
 			clearInterval(this.loop)
-			console.debug('in start loop mode=' + this.mode + ' latlng: ' + this.lat + ' ' + this.lon + ' address: ' + this.address)
 			if (this.lat && this.lon) {
 				this.loop = setInterval(() => this.getForecast(), 60 * 1000 * 60)
 				this.getForecast()
@@ -272,9 +269,6 @@ export default {
 				showError(this.$t('weather_status', 'There was an error saving the mode.'))
 				console.debug(err)
 			}
-		},
-		onCustomAddressClick() {
-			this.setAddress('manuuuu')
 		},
 		onBrowserLocationClick() {
 			this.askBrowserLocation()
