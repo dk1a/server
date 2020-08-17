@@ -31,7 +31,7 @@
 namespace OC\Files\Node;
 
 use OC\DB\QueryBuilder\Literal;
-use OCA\Files_Sharing\ISharedStorage;
+use OC\Files\Storage\Wrapper\Jail;
 use OCA\Files_Sharing\SharedStorage;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\ICachedMountInfo;
@@ -449,7 +449,7 @@ class Folder extends Node implements \OCP\Files\Folder {
 			$storageId = $storage->getCache()->getNumericStorageId();
 			$prefix = '';
 
-			if ($storage->instanceOfStorage(ISharedStorage::class)) {
+			if ($storage->instanceOfStorage(Jail::class)) {
 				$prefix = $storage->getUnJailedPath('');
 			}
 
