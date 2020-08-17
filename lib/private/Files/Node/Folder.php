@@ -465,7 +465,7 @@ class Folder extends Node implements \OCP\Files\Folder {
 		$searchResultCount = 0;
 		$count = 0;
 		do {
-			$searchResult = $this->recentSearch($searchLimit, $offset, $storageIds, $folderMimetype, $filters);
+			$searchResult = $this->recentSearch($searchLimit, $offset, $folderMimetype, $filters);
 
 			// Exit condition if there are no more results
 			if (count($searchResult) === 0) {
@@ -487,7 +487,7 @@ class Folder extends Node implements \OCP\Files\Folder {
 		return array_slice($results, 0, $limit);
 	}
 
-	private function recentSearch($limit, $offset, $storageIds, $folderMimetype, $filters) {
+	private function recentSearch($limit, $offset, $folderMimetype, $filters) {
 		$dbconn = \OC::$server->getDatabaseConnection();
 		$builder = $dbconn->getQueryBuilder();
 		$query = $builder
@@ -526,8 +526,6 @@ class Folder extends Node implements \OCP\Files\Folder {
 			->orderBy('f.mtime', 'DESC')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
-
-		$sql = $query->getSQL();
 
 		return $query->execute()->fetchAll();
 	}
