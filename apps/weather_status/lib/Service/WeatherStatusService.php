@@ -103,6 +103,7 @@ class WeatherStatusService {
 			$this->config->setUserValue($this->userId, 'weather_status', 'address', $address);
 			return [
 				'address' => $address,
+				'success' => true,
 			];
 		} elseif ($address !== '') {
 			return $this->setAddress($address);
@@ -168,6 +169,7 @@ class WeatherStatusService {
 				'lat' => $addressInfo['lat'],
 				'lon' => $addressInfo['lon'],
 				'address' => $formattedAddress,
+				'success' => true,
 			];
 		} else {
 			return ['success' => false];

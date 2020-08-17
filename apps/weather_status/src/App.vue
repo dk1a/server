@@ -26,14 +26,14 @@
 				id="weather-status-menu-item__subheader"
 				:default-icon="weatherIcon"
 				:menu-title="visibleMessage">
-				<ActionLink v-if="address"
+				<ActionLink v-if="address && !errorMessage"
 					icon="icon-address"
 					target="_blank"
 					:href="weatherLinkTarget"
 					:close-after-click="true">
 					{{ locationText }}
 				</ActionLink>
-				<ActionSeparator v-if="address" />
+				<ActionSeparator v-if="address && !errorMessage" />
 				<ActionButton
 					icon="icon-crosshair"
 					:close-after-click="true"
@@ -77,6 +77,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			errorMessage: '',
 			mode: MODE_BROWSER_LOCATION,
 			address: null,
 			lat: null,
@@ -158,9 +159,15 @@ export default {
 		 * @returns {String}
 		 */
 		visibleMessage() {
-			return this.sixHoursWeatherForecast
-				? this.sixHoursTempForecast + '° ' + this.weatherText
-				: this.$t('weather_status', 'Set location for weather')
+			if (this.loading) {
+				return this.$t('weather_status', 'Loading weather')
+			} else if (this.errorMessage) {
+				return this.errorMessage
+			} else {
+				return this.sixHoursWeatherForecast
+					? this.sixHoursTempForecast + '° ' + this.weatherText
+					: this.$t('weather_status', 'Set location for weather')
+			}
 		},
 		weatherLinkTarget() {
 			return 'https://www.windy.com/-Rain-thunder-rain?rain,' + this.lat + ',' + this.lon + ',11'
@@ -199,6 +206,7 @@ export default {
 		},
 		askBrowserLocation() {
 			this.loading = true
+			this.errorMessage = ''
 			if (navigator.geolocation && window.isSecureContext) {
 				navigator.geolocation.getCurrentPosition((position) => {
 					console.debug('browser location success')
@@ -239,13 +247,19 @@ export default {
 		},
 		async setAddress(address) {
 			this.loading = true
+			this.errorMessage = ''
 			try {
 				const loc = await network.setAddress(address)
-				this.lat = loc.lat
-				this.lon = loc.lon
-				this.address = loc.address
-				this.mode = MODE_MANUAL_LOCATION
-				this.startLoop()
+				if (loc.success) {
+					this.lat = loc.lat
+					this.lon = loc.lon
+					this.address = loc.address
+					this.mode = MODE_MANUAL_LOCATION
+					this.startLoop()
+				} else {
+					this.errorMessage = this.$t('weather_status', 'Location not found')
+					this.loading = false
+				}
 			} catch (err) {
 				showError(this.$t('weather_status', 'There was an error setting the location address.'))
 				console.debug(err)
